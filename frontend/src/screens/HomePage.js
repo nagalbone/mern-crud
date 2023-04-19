@@ -1,6 +1,6 @@
 import React from 'react'
 import {Table,Container,Row,Col} from 'react-bootstrap';
-import AddModel from './AddModel';
+import AddModel from '../components/AddModel';
 
 const HomePage = () => {
   return (
