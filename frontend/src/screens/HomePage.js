@@ -1,5 +1,10 @@
 import React from 'react'
-import {Table,Container,Row,Col} from 'react-bootstrap';
+import {
+    Table,
+    Container,
+    Row,
+    Col
+} from 'react-bootstrap';
 import AddModel from '../components/AddModel';
 
 const HomePage = () => {
@@ -31,8 +36,6 @@ const HomePage = () => {
                     <td>Pune</td>
                     <td><i class="fas fa-edit"></i>&nbsp;&nbsp;<i class="fa fa-trash"></i></td>
                     </tr>
-                    
-                    
                 </tbody>
                 </Table>
             </Col>
