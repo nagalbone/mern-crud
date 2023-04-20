@@ -1,9 +1,11 @@
 const express = require('express');
 const connectDb = require('./config/config');
 const User = require('./model/User');
+const cors = require('cors');
 //connection to database
 connectDb();
 const app = express();
+app.use(cors());
 
 app.get('/',(req,res)=>{
     res.send("<h1>WELCOM</h1>");

@@ -1,48 +1,59 @@
-import React from 'react'
-import {
-    Table,
-    Container,
-    Row,
-    Col
-} from 'react-bootstrap';
-import AddModel from '../components/AddModel';
+import React, { useEffect, useState } from "react";
+import { Table, Container, Row, Col } from "react-bootstrap";
+import AddModel from "../components/AddModel";
 
 const HomePage = () => {
+  const [users, setUsers] = useState();
+
+  const fetchData = () => {
+    return fetch("http://localhost:8080/getData")
+      .then((response) => response.json())
+      .then((data) => setUsers(data));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
-    <Container>
+      <Container>
         <Row>
-            <Col>
-            <br/>
+          <Col>
+            <br />
             <AddModel />
-            <hr/>
+            <hr />
             <Table striped bordered hover>
-                <thead>
-                    <tr>
-                    <th>Sr.No</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Address</th>
-                    <th>Actions</th>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Address</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users?.map((items, i) => {
+                  return (
+                    <tr key={i}>
+                      <td>{items.firstName}</td>
+                      <td>{items.lastName}</td>
+                      <td>{items.mobile}</td>
+                      <td>{items.address}</td>
+                      <td>
+                        <i className="fas fa-edit"></i>&nbsp;&nbsp;
+                        <i className="fa fa-trash"></i>
+                      </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td>1</td>
-                    <td>yogesh Sabankar</td>
-                    <td>sabankar@gmail.com</td>
-                    <td>9563256451</td>
-                    <td>Pune</td>
-                    <td><i class="fas fa-edit"></i>&nbsp;&nbsp;<i class="fa fa-trash"></i></td>
-                    </tr>
-                </tbody>
-                </Table>
-            </Col>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Col>
         </Row>
-    </Container>
+      </Container>
     </>
-  )
-}
+  );
+};
 
 export default HomePage;
