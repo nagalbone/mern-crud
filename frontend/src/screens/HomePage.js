@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
-
+import { useNavigate } from "react-router-dom";
 const HomePage = () => {
   const [users, setUsers] = useState();
   const [loadGrid, setLoadGrid] = useState();
-
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [address, setAddress] = useState("");
+  const navigate = useNavigate();
 
   // get data
   const fetchData = () => {
@@ -48,40 +37,6 @@ const HomePage = () => {
     }
   };
 
-  //submit form
-  const submitForm = async (e) => {
-    e.preventDefault();
-    try {
-      let res = await fetch("http://localhost:8080/postData", {
-        method: "POST",
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          mobile,
-          address,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (res.status === 200) {
-        alert("User created successfully");
-        handleClose();
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setMobile("");
-        setAddress("");
-        setLoadGrid(email);
-      } else {
-        alert("Some error occured");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, [loadGrid]);
@@ -92,9 +47,11 @@ const HomePage = () => {
         <Row>
           <Col>
             <br />
-            <Button variant="primary" onClick={handleShow}>
+
+            <Button onClick={() => navigate("/add")} variant="primary">
               Add
             </Button>
+
             <hr />
             <Table striped bordered hover>
               <thead>
@@ -116,6 +73,12 @@ const HomePage = () => {
                       <td>{items.address}</td>
                       <td>
                         <i
+                          className="fas fa-edit"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => navigate(`/edit/${items._id}`)}
+                        ></i>
+                        &nbsp;
+                        <i
                           className="fa fa-trash"
                           style={{ cursor: "pointer" }}
                           onClick={() => deleteData(items._id)}
@@ -129,79 +92,6 @@ const HomePage = () => {
           </Col>
         </Row>
       </Container>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter First NAme"
-                name="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Last Name"
-                name="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Mobile</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Mobile"
-                name="mobile"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Address"
-                name="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </Form.Group>
-
-            <Button variant="primary" onClick={submitForm}>
-              Add
-            </Button>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };
